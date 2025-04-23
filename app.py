@@ -319,14 +319,14 @@ async def startup_event():
     logging.info("API started successfully")
     logging.info(f"Loaded {len(search_engine.products)} products, {len(search_engine.solutions)} solutions, and {len(search_engine.technical_docs)} technical documents")
 
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
 
 # Serve index.html for all other routes (SPA support)
 @app.get("/{full_path:path}")
 async def serve_spa(full_path: str):
-    if os.path.exists(os.path.join("frontend", full_path)):
-        return FileResponse(os.path.join("frontend", full_path))
-    return FileResponse("frontend/index.html")
+    if os.path.exists(os.path.join("frontend/dist", full_path)):
+        return FileResponse(os.path.join("frontend/dist", full_path))
+    return FileResponse("frontend/dist/index.html")
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
