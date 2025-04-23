@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Colt Wayfinder</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><link rel="stylesheet" href="dist/styles.css"><style>:root {
+            --colt-primary: #33334d;
+            --colt-secondary: #0098db;
+            --colt-accent: #ff4d4d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .colt-gradient {
+            background: linear-gradient(135deg, var(--colt-primary) 0%, var(--colt-secondary) 100%);
+        }
+        
+        .colt-btn {
+            background-color: var(--colt-secondary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .colt-btn:hover {
+            background-color: #0077aa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .solution-card {
+            transition: all 0.3s ease;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-pill {
+            background-color: var(--colt-primary);
+            color: white;
+            border-radius: 999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .search-box {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus-within {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        
+        .wayfinder-step {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .wayfinder-step:nth-child(1) { animation-delay: 0.1s; }
+        .wayfinder-step:nth-child(2) { animation-delay: 0.3s; }
+        .wayfinder-step:nth-child(3) { animation-delay: 0.5s; }
+        .wayfinder-step:nth-child(4) { animation-delay: 0.7s; }</style><script defer="defer" src="/bundle.js"></script></head><body><div id="root"></div><script src="dist/bundle.js"></script></body></html>

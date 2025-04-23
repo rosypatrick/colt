@@ -6,7 +6,7 @@ A demonstration of an intelligent wayfinder tool for Colt's smoke control, venti
 
 The Colt Wayfinder Tool helps users easily navigate Colt's product offerings and find the perfect solutions for their specific building needs. Key features include:
 
-- **Intelligent Search**: Find products, solutions, and technical documentation through a powerful search engine
+- **Intelligent Search**: Find products, solutions, and technical documentation through a powerful vector-based search engine
 - **Guided Journey**: Answer a few simple questions about your industry, problem, and building type to get tailored recommendations
 - **Related Content**: Discover related products, solutions, and resources to make informed decisions
 - **Technical Specifications**: Access detailed specifications for all products
@@ -19,7 +19,11 @@ colt-wayfinder/
 ├── app.py                 # FastAPI backend application
 ├── scraper.py             # Web scraper for collecting data from Colt's website
 ├── search_engine.py       # Vector search implementation for the wayfinder
-├── scraped_data/          # Directory for storing scraped data
+├── scraped_data/          # Directory for storing scraped product data
+│   ├── apollo.md          # Example product data file
+│   ├── product_overview.md # Overview of all products
+│   ├── smoke-control/     # Categorized product data
+│   └── ...                # Other product data files
 ├── frontend/              # Frontend React application
 │   ├── index.html         # Main HTML file
 │   ├── app.js             # React application code
@@ -28,12 +32,19 @@ colt-wayfinder/
 └── README.md              # This file
 ```
 
+## Technology Stack
+
+- **Backend**: Python 3.8+ with FastAPI
+- **Search Engine**: TF-IDF vectorization for semantic search
+- **Frontend**: React with Tailwind CSS
+- **Data Storage**: Markdown files for product data
+
 ## Setup Instructions
 
 ### Prerequisites
 
 - Python 3.8+
-- Node.js 14+ (optional, for development)
+- Node.js 14+ (optional, for frontend development)
 - Git
 
 ### Installation
@@ -55,37 +66,47 @@ colt-wayfinder/
    pip install -r requirements.txt
    ```
 
-4. Ensure the `frontend` directory exists:
+4. Run the application:
    ```
-   mkdir -p frontend
+   python app.py
    ```
 
-### Running the Demo
+5. Open your browser and navigate to:
+   ```
+   http://localhost:8000
+   ```
 
-#### 1. Data Collection (Optional)
+## Data Structure
 
-To scrape data from Colt's website (optional, as sample data is included):
+The application uses markdown files in the `scraped_data/` directory to store product information. Each product is represented by a markdown file with the following structure:
 
-```
-python scraper.py
-```
+```markdown
+# Product Name
 
-This will populate the `scraped_data` directory with product, solution, and technical documentation data.
+**Category:** Product Category
 
-#### 2. Start the API Server
+## Description
+Detailed product description...
 
-```
-python app.py
-```
+## Features
+- Feature 1
+- Feature 2
+- ...
 
-The API will be available at http://localhost:8000. It also serves the frontend static files.
+## Specifications
+**Spec1:** Value1
+**Spec2:** Value2
+...
 
-#### 3. Access the Demo
+## Images
+![Product image](image_url)
+...
 
-Open your browser and navigate to:
-
-```
-http://localhost:8000
+---
+url: https://example.com/product-url
+category: Product Category
+type: product
+---
 ```
 
 ## API Routes
@@ -108,17 +129,9 @@ http://localhost:8000
 ### Scenario 2: HVAC Contractor Looking for Technical Specifications
 1. Use the search box at the top of the page
 2. Search for "exhaust fan"
-3. Click on the Industrial Exhaust Fan Series 500 result
+3. Click on a product result
 4. Expand the details to view the technical specifications
 5. Explore related products and solutions
-
-### Scenario 3: Architect Researching Climate Control Options
-1. Use the guided search feature
-2. Select "Commercial Real Estate" as the industry
-3. Select "Climate Control" as the problem type
-4. Select "Shopping Center" as the building type
-5. Explore the recommended solutions
-6. Check out related technical documentation and case studies
 
 ## Future Enhancements
 
@@ -129,6 +142,15 @@ http://localhost:8000
 - **Product Configurator**: Interactive tool to customize products for specific needs
 - **Advanced Filtering**: More detailed filtering options for specific requirements
 - **Multi-language Support**: Expand to support all languages Colt operates in
+
+## Documentation
+
+For more information about the libraries and frameworks used in this project, refer to their official documentation:
+
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [scikit-learn Documentation](https://scikit-learn.org/stable/documentation.html)
 
 ## License
 

@@ -1,219 +1,48 @@
-// Mock API for demo purposes
-const API = {
-    search: (query) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const results = MOCK_DATA.filter(item => 
-                    item.title.toLowerCase().includes(query.toLowerCase()) ||
-                    item.description.toLowerCase().includes(query.toLowerCase())
-                );
-                resolve(results);
-            }, 500);
-        });
-    },
-    
-    guidedSearch: (params) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                let results = MOCK_DATA;
-                
-                if (params.industry) {
-                    results = results.filter(item => {
-                        if (item.type === 'solution' && item.industries) {
-                            return item.industries.some(ind => ind.toLowerCase() === params.industry.toLowerCase());
-                        }
-                        return false;
-                    });
-                }
-                
-                if (params.problemType) {
-                    const problemTypeResults = MOCK_DATA.filter(item => {
-                        if (item.type === 'product' && item.categories) {
-                            return item.categories.some(cat => cat.toLowerCase() === params.problemType.toLowerCase());
-                        }
-                        return false;
-                    });
-                    
-                    problemTypeResults.forEach(item => {
-                        item.recommendationType = 'Suggested Product';
-                    });
-                    
-                    results = [...results, ...problemTypeResults];
-                }
-                
-                results.forEach(item => {
-                    if (!item.recommendationType) {
-                        if (item.type === 'solution') {
-                            item.recommendationType = 'Recommended Solution';
-                        } else if (item.type === 'product') {
-                            item.recommendationType = 'Suggested Product';
-                        } else if (item.type === 'technical_document') {
-                            item.recommendationType = 'Helpful Resource';
-                        }
-                    }
-                });
-                
-                const uniqueResults = [];
-                const ids = new Set();
-                results.forEach(item => {
-                    if (!ids.has(item.id)) {
-                        ids.add(item.id);
-                        uniqueResults.push(item);
-                    }
-                });
-                
-                resolve(uniqueResults);
-            }, 800);
-        });
-    },
-    
-    getRelated: (itemId) => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const item = MOCK_DATA.find(i => i.id === itemId);
-                if (!item) {
-                    resolve([]);
-                    return;
-                }
-                
-                let relatedIds = [];
-                
-                if (item.type === 'product') {
-                    MOCK_DATA.forEach(i => {
-                        if (i.type === 'solution' && i.relatedProducts && i.relatedProducts.includes(item.id)) {
-                            relatedIds.push(i.id);
-                        }
-                    });
-                    
-                    const categories = item.categories || [];
-                    MOCK_DATA.forEach(i => {
-                        if (i.type === 'product' && i.id !== item.id && i.categories) {
-                            for (const cat of categories) {
-                                if (i.categories.includes(cat)) {
-                                    relatedIds.push(i.id);
-                                    break;
-                                }
-                            }
-                        }
-                    });
-                }
-                
-                if (item.type === 'solution') {
-                    relatedIds = [...(item.relatedProducts || [])];
-                }
-                
-                const related = relatedIds
-                    .map(id => MOCK_DATA.find(i => i.id === id))
-                    .filter(Boolean);
-                
-                const technicalDocs = MOCK_DATA.filter(i => 
-                    i.type === 'technical_document' && 
-                    ((i.relatedProducts && i.relatedProducts.includes(item.id)) ||
-                     (i.relatedSolutions && i.relatedSolutions.includes(item.id)))
-                );
-                
-                resolve([...related, ...technicalDocs]);
-            }, 600);
-        });
-    }
+// Colt Wayfinder - Frontend Application
+
+// Import the API client
+const { API } = require('./api-client.js');
+
+// Loading and Error components
+const LoadingSpinner = () => {
+    return (
+        <div className="flex justify-center items-center py-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+    );
 };
 
-// Mock data for demo
-const MOCK_DATA = [
-    {
-        id: 'p1',
-        type: 'product',
-        title: 'Industrial Exhaust Fan Series 500',
-        description: 'Heavy-duty exhaust fans designed for smoke extraction in industrial environments.',
-        specifications: {
-            'Temperature Rating': '400°C for 2 hours',
-            'Airflow': 'Up to 45,000 m³/h',
-        },
-        categories: ['Smoke Control', 'Ventilation', 'Industrial'],
-        url: 'http://colt.info/gb/en/products/smoke-control-ventilation/exhaust-fans'
-    },
-    {
-        id: 'p2',
-        type: 'product',
-        title: 'EcoVent Air Handling Unit',
-        description: 'Energy-efficient air handling units for commercial buildings.',
-        specifications: {
-            'Airflow': '1,000 - 25,000 m³/h',
-            'Heat Recovery Efficiency': 'Up to 85%',
-        },
-        categories: ['Climate Control', 'Energy Efficiency', 'Commercial'],
-        url: 'http://colt.info/gb/en/products/climate-control/air-handling-units'
-    },
-    {
-        id: 'p3',
-        type: 'product',
-        title: 'SkyLite Natural Ventilator',
-        description: 'Roof-mounted natural ventilators for day-to-day ventilation and smoke control.',
-        specifications: {
-            'Aerodynamic Free Area': '1.0 - 6.0 m²',
-            'Installation': 'Roof-mounted',
-        },
-        categories: ['Smoke Control', 'Natural Ventilation', 'Sustainable'],
-        url: 'http://colt.info/gb/en/products/smoke-control-ventilation/natural-ventilators'
-    },
-    {
-        id: 's1',
-        type: 'solution',
-        title: 'Smoke Control for Commercial Buildings',
-        description: 'Comprehensive smoke control solutions for office buildings, shopping centers, and multi-purpose commercial spaces.',
-        industries: ['Commercial Real Estate', 'Retail', 'Office Buildings'],
-        relatedProducts: ['p1', 'p3'],
-        url: 'http://colt.info/gb/en/solutions/commercial-buildings'
-    },
-    {
-        id: 's2',
-        type: 'solution',
-        title: 'Climate Control for Industrial Facilities',
-        description: 'Energy-efficient climate control solutions for manufacturing plants, warehouses, and industrial facilities.',
-        industries: ['Manufacturing', 'Logistics', 'Warehousing'],
-        relatedProducts: ['p1', 'p2'],
-        url: 'http://colt.info/gb/en/solutions/industrial-facilities'
-    },
-    {
-        id: 'd1',
-        type: 'technical_document',
-        title: 'Guide to Smoke Control Regulations in Commercial Buildings',
-        description: 'Comprehensive guide to regulatory requirements for smoke control systems.',
-        docType: 'pdf',
-        relatedProducts: ['p1', 'p3'],
-        relatedSolutions: ['s1'],
-        url: 'http://colt.info/gb/en/technical/whitepapers/smoke-control-regulations'
-    },
-    {
-        id: 'd2',
-        type: 'technical_document',
-        title: 'Case Study: Energy Optimization in Manufacturing',
-        description: 'Learn how a manufacturing facility reduced energy consumption by 35%.',
-        docType: 'pdf',
-        relatedProducts: ['p2'],
-        relatedSolutions: ['s2'],
-        url: 'http://colt.info/gb/en/technical/case-studies/manufacturing-climate-control'
-    }
-];
+const ErrorMessage = ({ message }) => {
+    return (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4" role="alert">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{message}</span>
+        </div>
+    );
+};
 
 // React Components
-const Header = () => (
-    <header className="bg-white shadow-md">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div className="flex items-center">
-                <div className="mr-4 w-20 h-10 bg-gray-300 flex items-center justify-center text-gray-700 font-bold">COLT</div>
-                <h1 className="text-xl font-bold text-gray-800">Wayfinder</h1>
+const Header = () => {
+    return (
+        <header className="colt-gradient text-white shadow-lg">
+            <div className="container mx-auto px-4 py-4">
+                <div className="flex flex-col md:flex-row justify-between items-center">
+                    <div className="flex items-center mb-4 md:mb-0">
+                        <h1 className="text-2xl font-bold">Colt Wayfinder</h1>
+                    </div>
+                    <nav>
+                        <ul className="flex space-x-6">
+                            <li><a href="#" className="hover:text-gray-300 transition">Products</a></li>
+                            <li><a href="#" className="hover:text-gray-300 transition">Solutions</a></li>
+                            <li><a href="#" className="hover:text-gray-300 transition">Resources</a></li>
+                            <li><a href="#" className="hover:text-gray-300 transition">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <nav>
-                <ul className="flex space-x-6">
-                    <li><a href="#" className="text-gray-600 hover:text-blue-500">Products</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-blue-500">Solutions</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-blue-500">Resources</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-);
+        </header>
+    );
+};
 
 // Search Component
 const Search = ({ onSearch }) => {
@@ -227,17 +56,20 @@ const Search = ({ onSearch }) => {
     };
     
     return (
-        <div className="my-6">
-            <form onSubmit={handleSubmit} className="search-box flex items-center bg-white rounded-full overflow-hidden px-4 py-2">
+        <div className="search-box bg-white rounded-lg shadow-md p-4 mb-6">
+            <form onSubmit={handleSubmit} className="flex">
                 <input
                     type="text"
                     placeholder="Search for products, solutions, or documentation..."
-                    className="flex-grow outline-none px-2 py-1"
+                    className="flex-grow px-4 py-2 rounded-l-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <button type="submit" className="ml-2 colt-btn rounded-full w-10 h-10 flex items-center justify-center">
-                    <i className="fas fa-search"></i>
+                <button 
+                    type="submit" 
+                    className="colt-btn px-6 py-2 rounded-r-lg"
+                >
+                    <i className="fas fa-search mr-2"></i> Search
                 </button>
             </form>
         </div>
@@ -246,42 +78,93 @@ const Search = ({ onSearch }) => {
 
 // Guided Search Component
 const GuidedSearch = ({ onSearch }) => {
-    const [industry, setIndustry] = React.useState('');
-    const [problemType, setProblemType] = React.useState('');
-    const [buildingType, setBuildingType] = React.useState('');
     const [step, setStep] = React.useState(1);
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState(null);
+    const [categories, setCategories] = React.useState(null);
+    const [params, setParams] = React.useState({
+        industry: '',
+        problemType: '',
+        buildingType: '',
+        projectSize: '',
+        application: '',
+        glazing: '',
+        useType: '',
+        cvValue: '',
+        uValue: '',
+        acousticsValue: ''
+    });
     
-    const industries = ['Commercial Real Estate', 'Manufacturing', 'Retail', 'Warehousing'];
-    const problemTypes = ['Smoke Control', 'Climate Control', 'Ventilation', 'Energy Efficiency'];
-    const buildingTypes = ['Office Building', 'Factory', 'Warehouse', 'Shopping Center'];
+    // Fetch categories on component mount
+    React.useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const data = await API.getCategories();
+                setCategories(data);
+            } catch (err) {
+                setError('Failed to load categories. Please try again later.');
+                console.error('Error fetching categories:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchCategories();
+    }, []);
     
-    const handleNextStep = () => setStep(step + 1);
-    const handlePrevStep = () => setStep(step - 1);
-    
-    const handleSearch = () => {
-        onSearch({
-            industry,
-            problemType,
-            buildingType
-        });
+    const handleNextStep = () => {
+        setStep(prevStep => prevStep + 1);
     };
     
+    const handlePrevStep = () => {
+        setStep(prevStep => prevStep - 1);
+    };
+    
+    const handleSearch = () => {
+        // Filter out empty parameters
+        const filteredParams = Object.fromEntries(
+            Object.entries(params).filter(([_, value]) => value !== '')
+        );
+        
+        onSearch(filteredParams);
+    };
+    
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+    
+    if (error) {
+        return <ErrorMessage message={error} />;
+    }
+    
+    if (!categories) {
+        return null;
+    }
+    
     return (
-        <div className="bg-white rounded-lg shadow-lg p-6 my-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Find the Right Solution</h2>
-            <p className="text-gray-600 mb-6">Tell us about your project, and we'll guide you to the best Colt solutions.</p>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Find Your Perfect Solution</h2>
+            <p className="text-gray-600 mb-6">
+                Answer a few questions to help us recommend the best products and solutions for your needs.
+            </p>
             
             {step === 1 && (
                 <div className="wayfinder-step">
                     <h3 className="text-lg font-semibold mb-3">What industry are you in?</h3>
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                        {industries.map(ind => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        {categories.industries.map(industry => (
                             <button
-                                key={ind}
-                                className={`p-3 rounded-lg border transition-all ${industry === ind ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
-                                onClick={() => setIndustry(ind)}
+                                key={industry}
+                                className={`p-3 rounded-lg border-2 text-left ${
+                                    params.industry === industry 
+                                        ? 'border-blue-500 bg-blue-50' 
+                                        : 'border-gray-300 hover:border-blue-300'
+                                }`}
+                                onClick={() => setParams({...params, industry})}
                             >
-                                {ind}
+                                {industry}
                             </button>
                         ))}
                     </div>
@@ -289,7 +172,7 @@ const GuidedSearch = ({ onSearch }) => {
                         <button 
                             className="colt-btn py-2 px-4 rounded-lg"
                             onClick={handleNextStep}
-                            disabled={!industry}
+                            disabled={!params.industry}
                         >
                             Next <i className="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -300,20 +183,24 @@ const GuidedSearch = ({ onSearch }) => {
             {step === 2 && (
                 <div className="wayfinder-step">
                     <h3 className="text-lg font-semibold mb-3">What problem are you trying to solve?</h3>
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                        {problemTypes.map(type => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        {categories.problemTypes.map(problemType => (
                             <button
-                                key={type}
-                                className={`p-3 rounded-lg border transition-all ${problemType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
-                                onClick={() => setProblemType(type)}
+                                key={problemType}
+                                className={`p-3 rounded-lg border-2 text-left ${
+                                    params.problemType === problemType 
+                                        ? 'border-blue-500 bg-blue-50' 
+                                        : 'border-gray-300 hover:border-blue-300'
+                                }`}
+                                onClick={() => setParams({...params, problemType})}
                             >
-                                {type}
+                                {problemType}
                             </button>
                         ))}
                     </div>
                     <div className="flex justify-between mt-4">
                         <button 
-                            className="border border-gray-300 py-2 px-4 rounded-lg text-gray-600 hover:bg-gray-50"
+                            className="py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-100"
                             onClick={handlePrevStep}
                         >
                             <i className="fas fa-arrow-left mr-2"></i> Back
@@ -321,7 +208,7 @@ const GuidedSearch = ({ onSearch }) => {
                         <button 
                             className="colt-btn py-2 px-4 rounded-lg"
                             onClick={handleNextStep}
-                            disabled={!problemType}
+                            disabled={!params.problemType}
                         >
                             Next <i className="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -331,21 +218,104 @@ const GuidedSearch = ({ onSearch }) => {
             
             {step === 3 && (
                 <div className="wayfinder-step">
-                    <h3 className="text-lg font-semibold mb-3">What type of building?</h3>
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                        {buildingTypes.map(type => (
+                    <h3 className="text-lg font-semibold mb-3">What type of building is it for?</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                        {categories.buildingTypes.map(buildingType => (
                             <button
-                                key={type}
-                                className={`p-3 rounded-lg border transition-all ${buildingType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
-                                onClick={() => setBuildingType(type)}
+                                key={buildingType}
+                                className={`p-3 rounded-lg border-2 text-left ${
+                                    params.buildingType === buildingType 
+                                        ? 'border-blue-500 bg-blue-50' 
+                                        : 'border-gray-300 hover:border-blue-300'
+                                }`}
+                                onClick={() => setParams({...params, buildingType})}
                             >
-                                {type}
+                                {buildingType}
                             </button>
                         ))}
                     </div>
                     <div className="flex justify-between mt-4">
                         <button 
-                            className="border border-gray-300 py-2 px-4 rounded-lg text-gray-600 hover:bg-gray-50"
+                            className="py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-100"
+                            onClick={handlePrevStep}
+                        >
+                            <i className="fas fa-arrow-left mr-2"></i> Back
+                        </button>
+                        <button 
+                            className="colt-btn py-2 px-4 rounded-lg"
+                            onClick={handleNextStep}
+                            disabled={!params.buildingType}
+                        >
+                            Next <i className="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            )}
+            
+            {step === 4 && (
+                <div className="wayfinder-step">
+                    <h3 className="text-lg font-semibold mb-3">Additional Requirements (Optional)</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Project Size</label>
+                            <select 
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={params.projectSize}
+                                onChange={(e) => setParams({...params, projectSize: e.target.value})}
+                            >
+                                <option value="">Select project size</option>
+                                {categories.projectSizes.map(size => (
+                                    <option key={size} value={size}>{size}</option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Application</label>
+                            <select 
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={params.application}
+                                onChange={(e) => setParams({...params, application: e.target.value})}
+                            >
+                                <option value="">Select application</option>
+                                {categories.applications.map(app => (
+                                    <option key={app} value={app}>{app}</option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Glazing Type</label>
+                            <select 
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={params.glazing}
+                                onChange={(e) => setParams({...params, glazing: e.target.value})}
+                            >
+                                <option value="">Select glazing type</option>
+                                {categories.glazingTypes.map(type => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Interior or Exterior</label>
+                            <select 
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={params.useType}
+                                onChange={(e) => setParams({...params, useType: e.target.value})}
+                            >
+                                <option value="">Select use type</option>
+                                {categories.useTypes.map(type => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div className="flex justify-between mt-4">
+                        <button 
+                            className="py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-100"
                             onClick={handlePrevStep}
                         >
                             <i className="fas fa-arrow-left mr-2"></i> Back
@@ -353,7 +323,6 @@ const GuidedSearch = ({ onSearch }) => {
                         <button 
                             className="colt-btn py-2 px-4 rounded-lg"
                             onClick={handleSearch}
-                            disabled={!buildingType}
                         >
                             Find Solutions <i className="fas fa-search ml-2"></i>
                         </button>
@@ -369,6 +338,7 @@ const ResultCard = ({ item }) => {
     const [expanded, setExpanded] = React.useState(false);
     const [relatedItems, setRelatedItems] = React.useState([]);
     const [loadingRelated, setLoadingRelated] = React.useState(false);
+    const [error, setError] = React.useState(null);
     
     const toggleExpand = () => {
         setExpanded(!expanded);
@@ -379,21 +349,46 @@ const ResultCard = ({ item }) => {
     
     const loadRelatedItems = async () => {
         setLoadingRelated(true);
+        setError(null);
         try {
-            const related = await API.getRelated(item.id);
-            setRelatedItems(related);
+            const data = await API.getRelated(item.id);
+            setRelatedItems(data.results || []);
+        } catch (err) {
+            console.error('Error loading related items:', err);
+            setError('Failed to load related items');
         } finally {
             setLoadingRelated(false);
         }
     };
     
+    // Function to render image if available
+    const renderImage = () => {
+        if (item.image_urls && item.image_urls.length > 0) {
+            return (
+                <div className="mb-4">
+                    <img 
+                        src={item.image_urls[0]} 
+                        alt={item.title} 
+                        className="w-full h-48 object-cover rounded-t-lg"
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                        }}
+                    />
+                </div>
+            );
+        }
+        return null;
+    };
+    
     return (
         <div className="solution-card bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+            {renderImage()}
             <div className="p-6">
-                {item.recommendationType && (
+                {item.recommendation_type && (
                     <div className="mb-2">
                         <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-                            {item.recommendationType}
+                            {item.recommendation_type}
                         </span>
                     </div>
                 )}
@@ -418,45 +413,74 @@ const ResultCard = ({ item }) => {
                         {expanded ? 'Show Less' : 'Show More'} 
                         <i className={`fas fa-chevron-${expanded ? 'up' : 'down'} ml-1`}></i>
                     </button>
-                    <a 
-                        href={item.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="colt-btn py-2 px-4 rounded-lg"
-                    >
-                        View Details
-                    </a>
+                    {item.url && (
+                        <a 
+                            href={item.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="colt-btn py-2 px-4 rounded-lg"
+                        >
+                            View Details
+                        </a>
+                    )}
                 </div>
             </div>
             
             {expanded && (
                 <div className="p-6 border-t border-gray-200">
-                    {item.type === 'product' && item.specifications && (
-                        <div className="mb-6">
-                            <h4 className="text-lg font-semibold mb-2">Specifications</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {Object.entries(item.specifications).map(([key, value]) => (
-                                    <div key={key} className="border-b border-gray-100 pb-2">
-                                        <span className="text-gray-500">{key}:</span> <span className="font-medium">{value}</span>
+                    {item.type === 'product' && (
+                        <>
+                            {item.specifications && Object.keys(item.specifications).length > 0 && (
+                                <div className="mb-6">
+                                    <h4 className="text-lg font-semibold mb-2">Performance Specifications</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {Object.entries(item.specifications).map(([key, value]) => (
+                                            <div key={key} className="border-b border-gray-100 pb-2">
+                                                <span className="text-gray-500">{key}:</span> <span className="font-medium">{value}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        </div>
+                                </div>
+                            )}
+                            
+                            {item.features && item.features.length > 0 && (
+                                <div className="mb-6">
+                                    <h4 className="text-lg font-semibold mb-2">Features</h4>
+                                    <ul className="list-disc pl-5 space-y-1">
+                                        {item.features.map((feature, index) => (
+                                            <li key={index} className="text-gray-700">{feature}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </>
                     )}
                     
                     <div>
                         <h4 className="text-lg font-semibold mb-2">Related Items</h4>
                         {loadingRelated ? (
-                            <p className="text-gray-500">Loading related items...</p>
+                            <LoadingSpinner />
+                        ) : error ? (
+                            <ErrorMessage message={error} />
                         ) : relatedItems.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {relatedItems.map(related => (
                                     <div key={related.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                                         <h5 className="font-medium mb-2">{related.title}</h5>
-                                        <p className="text-sm text-gray-500 mb-2">{related.type === 'product' ? 'Product' : related.type === 'solution' ? 'Solution' : 'Document'}</p>
-                                        <a href={related.url} className="text-blue-500 hover:underline text-sm">
-                                            View Details
-                                        </a>
+                                        <p className="text-sm text-gray-500 mb-2">
+                                            {related.type === 'product' ? 'Product' : 
+                                             related.type === 'solution' ? 'Solution' : 'Document'}
+                                        </p>
+                                        {related.url && (
+                                            <a 
+                                                href={related.url} 
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-500 hover:underline text-sm"
+                                            >
+                                                View Details
+                                            </a>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -471,37 +495,45 @@ const ResultCard = ({ item }) => {
 };
 
 // Hero Component
-const Hero = () => (
-    <div className="colt-gradient text-white py-12 px-4">
-        <div className="container mx-auto">
-            <div className="max-w-3xl">
-                <h1 className="text-4xl font-bold mb-4">Find the Perfect Colt Solution for Your Building</h1>
-                <p className="text-xl mb-6">Our intelligent wayfinder helps you navigate Colt's comprehensive range of smoke control, ventilation, and climate control solutions.</p>
-                <div className="flex space-x-4">
-                    <a href="#guided-search" className="colt-btn py-3 px-6 rounded-lg">
-                        Start Guided Search
-                    </a>
-                    <a href="#product-catalog" className="bg-transparent border-2 border-white py-3 px-6 rounded-lg hover:bg-white hover:text-gray-800 transition-colors">
-                        Browse Products
-                    </a>
+const Hero = () => {
+    return (
+        <div className="colt-gradient text-white py-12 px-4">
+            <div className="container mx-auto">
+                <div className="max-w-3xl">
+                    <h1 className="text-4xl font-bold mb-4">Find the Perfect Colt Solution for Your Building</h1>
+                    <p className="text-xl mb-6">Our intelligent wayfinder helps you navigate Colt's comprehensive range of smoke control, ventilation, and climate control solutions.</p>
+                    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#guided-search" className="colt-btn py-3 px-6 rounded-lg text-center">
+                            Start Guided Search
+                        </a>
+                        <a href="#product-catalog" className="bg-transparent border-2 border-white py-3 px-6 rounded-lg hover:bg-white hover:text-gray-800 transition-colors text-center">
+                            Browse Products
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 // Main App Component
 const App = () => {
     const [searchResults, setSearchResults] = React.useState([]);
     const [searching, setSearching] = React.useState(false);
     const [searchPerformed, setSearchPerformed] = React.useState(false);
+    const [error, setError] = React.useState(null);
     
     const handleSearch = async (query) => {
         setSearching(true);
         setSearchPerformed(true);
+        setError(null);
         try {
-            const results = await API.search(query);
-            setSearchResults(results);
+            const data = await API.search(query);
+            setSearchResults(data.results || []);
+        } catch (err) {
+            console.error('Search error:', err);
+            setError('Failed to perform search. Please try again later.');
+            setSearchResults([]);
         } finally {
             setSearching(false);
         }
@@ -510,9 +542,14 @@ const App = () => {
     const handleGuidedSearch = async (params) => {
         setSearching(true);
         setSearchPerformed(true);
+        setError(null);
         try {
-            const results = await API.guidedSearch(params);
-            setSearchResults(results);
+            const data = await API.guidedSearch(params);
+            setSearchResults(data.results || []);
+        } catch (err) {
+            console.error('Guided search error:', err);
+            setError('Failed to perform guided search. Please try again later.');
+            setSearchResults([]);
         } finally {
             setSearching(false);
         }
@@ -524,16 +561,16 @@ const App = () => {
             <Hero />
             
             <main className="container mx-auto px-4 py-8 flex-grow">
-                <div className="flex flex-col md:flex-row md:space-x-8">
-                    <div className="md:w-2/3">
+                <div className="flex flex-col lg:flex-row lg:space-x-8">
+                    <div className="lg:w-2/3">
                         <Search onSearch={handleSearch} />
+                        
+                        {error && <ErrorMessage message={error} />}
                         
                         {searchPerformed && (
                             <div className="my-6">
                                 {searching ? (
-                                    <div className="flex justify-center items-center py-12">
-                                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                                    </div>
+                                    <LoadingSpinner />
                                 ) : (
                                     <div>
                                         <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -560,7 +597,7 @@ const App = () => {
                         )}
                     </div>
                     
-                    <div className="md:w-1/3" id="guided-search">
+                    <div className="lg:w-1/3" id="guided-search">
                         <GuidedSearch onSearch={handleGuidedSearch} />
                         
                         <div className="bg-white rounded-lg shadow-lg p-6 my-6">
@@ -611,7 +648,7 @@ const App = () => {
                         </div>
                     </div>
                     <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
-                        <p>© 2025 Colt International. All rights reserved.</p>
+                        <p> 2025 Colt International. All rights reserved.</p>
                     </div>
                 </div>
             </footer>

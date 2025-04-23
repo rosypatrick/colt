@@ -1,0 +1,175 @@
+"""
+Comprehensive script to remove boilerplate text from all markdown files and update the search engine.
+"""
+
+import os
+import glob
+import re
+from pathlib import Path
+
+# The text to remove
+BOILERPLATE_TEXT = """We use cookies on our website colt.info/gb/en. Some of these cookies are essential while others help us to improve our website and personalise your experience. Please note, that if you do not accept functional and analytical cookies, some parts of our site may not work. For more information about the cookies we use please view our Privacy Policy.
+
+Colt pioneered natural ventilation in the 1930s, with over 85 years of climate control experience, making us the longest-standing company in the field. We've expanded from factory solutions to diverse building types.
+
+Colt has been manufacturing and installing external solutions for almost two decades. We are experts in screening and ventilation louvre panels and screening whilst maintaining rain defence.
+
+With decades of experience in smoke control system maintenance, Colt is a trusted leader in the field. We've refined our expertise across various building types, ensuring safety, compliance, and reliability.
+
+Explore our Resources area for downloads, knowledge articles, case studies, and additional design services. Access expert insights and tools to support your projects.
+
+Colt was founded by Jack O'Hea in 1931 and has been pioneering ventilation solutions ever since."""
+
+# Also remove these phrases that appear elsewhere in the files
+ADDITIONAL_PHRASES = [
+    "Climate Control ExpertsColt pioneered natural ventilation in the 1930s, with over 85 years of climate control experience, making us the longest-standing company in the field. We've expanded from factory solutions to diverse building types.",
+    "Louvre ExpertsColt has been manufacturing and installing external solutions for almost two decades. We are experts in screening and ventilation louvre panels and screening whilst maintaining rain defence.",
+    "Smoke Control System Maintenance ExpertsWith decades of experience in smoke control system maintenance, Colt is a trusted leader in the field. We've refined our expertise across various building types, ensuring safety, compliance, and reliability.",
+    "Colt UKExplore our Resources area for downloads, knowledge articles, case studies, and additional design services. Access expert insights and tools to support your projects.",
+    "ColtColt was founded by Jack O'Hea in 1931 and has been pioneering ventilation solutions ever since."
+]
+
+# Additional cookie notice fragments to remove
+COOKIE_FRAGMENTS = [
+    "We use cookies on our website colt.info/gb/en.",
+    "Some of these cookies are essential while others help us to improve our website and personalise your experience.",
+    "Please note, that if you do not accept functional and analytical cookies, some parts of our site may not work.",
+    "For more information about the cookies we use please view our Privacy Policy."
+]
+
+def clean_file(file_path):
+    """Remove boilerplate text from a markdown file."""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        original_content = content
+        
+        # Remove the main boilerplate text
+        if BOILERPLATE_TEXT in content:
+            content = content.replace(BOILERPLATE_TEXT, "")
+        
+        # Remove additional phrases
+        for phrase in ADDITIONAL_PHRASES:
+            if phrase in content:
+                content = content.replace(phrase, "")
+        
+        # Remove cookie fragments
+        for fragment in COOKIE_FRAGMENTS:
+            if fragment in content:
+                content = content.replace(fragment, "")
+        
+        # Check if content was changed
+        if content != original_content:
+            # Write the cleaned content back to the file
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            print(f"Cleaned {file_path}")
+            return True
+        else:
+            print(f"No changes needed for {file_path}")
+            return False
+    except Exception as e:
+        print(f"Error processing file {file_path}: {str(e)}")
+        return False
+
+def update_search_engine():
+    """Update the search_engine.py file to filter out unwanted text during parsing."""
+    search_engine_path = "search_engine.py"
+    
+    try:
+        with open(search_engine_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Find the parse_markdown_file method
+        parse_method_pattern = r'def parse_markdown_file\(self, file_path\):(.*?)def '
+        parse_method_match = re.search(parse_method_pattern, content, re.DOTALL)
+        
+        if not parse_method_match:
+            print("Could not find parse_markdown_file method in search_engine.py")
+            return False
+        
+        parse_method = parse_method_match.group(1)
+        
+        # Check if we need to add the filter code
+        if "# Filter out unwanted boilerplate text" not in parse_method:
+            # Find the description extraction part
+            desc_extraction_pattern = r'# Extract the description\s+description = ""\s+desc_section = re\.search\(r\'## Description\\s+\(.*?\)\(?=##|\\Z\)\', content, re\.DOTALL\)\s+if desc_section:\s+description = desc_section\.group\(1\)\.strip\(\)'
+            desc_extraction_match = re.search(desc_extraction_pattern, content, re.DOTALL)
+            
+            if not desc_extraction_match:
+                print("Could not find description extraction code in parse_markdown_file method")
+                return False
+            
+            # Prepare the replacement code with filter
+            replacement_code = """# Extract the description
+        description = ""
+        desc_section = re.search(r'## Description\\s+(.*?)(?=##|\\Z)', content, re.DOTALL)
+        if desc_section:
+            description = desc_section.group(1).strip()
+            
+            # Filter out unwanted boilerplate text
+            cookie_text = "We use cookies on our website colt.info/gb/en."
+            if cookie_text in description:
+                # Remove the entire cookie notice and company history paragraph
+                boilerplate_pattern = r'We use cookies on our website.*?ventilation solutions ever since\.'
+                description = re.sub(boilerplate_pattern, "", description, flags=re.DOTALL)
+                
+                # Remove any remaining fragments
+                cookie_fragments = [
+                    "We use cookies on our website colt.info/gb/en.",
+                    "Some of these cookies are essential while others help us to improve our website",
+                    "Please note, that if you do not accept functional and analytical cookies",
+                    "For more information about the cookies we use please view our Privacy Policy."
+                ]
+                for fragment in cookie_fragments:
+                    description = description.replace(fragment, "")
+                
+                # Clean up any excessive whitespace
+                description = re.sub(r'\n{3,}', '\n\n', description)
+                description = description.strip()"""
+            
+            # Replace the description extraction code with our new code
+            updated_content = content.replace(desc_extraction_match.group(0), replacement_code)
+            
+            # Write the updated content back to the file
+            with open(search_engine_path, 'w', encoding='utf-8') as f:
+                f.write(updated_content)
+            
+            print(f"Updated {search_engine_path} to filter out unwanted text during parsing")
+            return True
+        else:
+            print(f"No changes needed for {search_engine_path}")
+            return False
+    except Exception as e:
+        print(f"Error updating search engine: {str(e)}")
+        return False
+
+def main():
+    """Process all markdown files in the scraped_data directory and update the search engine."""
+    data_directory = "scraped_data"
+    
+    # Find all markdown files in the data directory and its subdirectories
+    md_files = glob.glob(os.path.join(data_directory, "**/*.md"), recursive=True)
+    
+    if not md_files:
+        print(f"No markdown files found in {data_directory}")
+        return
+    
+    print(f"Found {len(md_files)} markdown files")
+    
+    # Process each markdown file
+    success_count = 0
+    for md_file in md_files:
+        if clean_file(md_file):
+            success_count += 1
+    
+    print(f"Successfully cleaned {success_count} out of {len(md_files)} files")
+    
+    # Update the search engine
+    update_search_engine()
+    
+    print("Done. Please restart the server for changes to take effect.")
+
+if __name__ == "__main__":
+    main()

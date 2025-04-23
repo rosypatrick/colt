@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 8px;
+            width: 300px;
+        }
+        .search-button {
+            padding: 8px 16px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .result h3 {
+            margin-top: 0;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Test</h1>
+    
+    <div class="search-form">
+        <input type="text" id="search-input" class="search-input" placeholder="Enter search term...">
+        <button id="search-button" class="search-button">Search</button>
+    </div>
+    
+    <div id="results-container"></div>
+    
+    <script>
+        document.getElementById('search-button').addEventListener('click', performSearch);
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        async function performSearch() {
+            const searchTerm = document.getElementById('search-input').value.trim();
+            if (!searchTerm) return;
+            
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = '<p>Searching...</p>';
+            
+            try {
+                const response = await fetch(`/search?q=${encodeURIComponent(searchTerm)}&limit=5`);
+                const data = await response.json();
+                
+                displayResults(data);
+            } catch (error) {
+                resultsContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+            }
+        }
+        
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = '';
+            
+            if (!data.results || data.results.length === 0) {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+                return;
+            }
+            
+            const resultsHeader = document.createElement('h2');
+            resultsHeader.textContent = `Found ${data.total} results`;
+            resultsContainer.appendChild(resultsHeader);
+            
+            // Display the raw JSON for debugging
+            const rawJson = document.createElement('pre');
+            rawJson.textContent = JSON.stringify(data, null, 2);
+            resultsContainer.appendChild(rawJson);
+            
+            // Display formatted results
+            data.results.forEach(result => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result';
+                
+                const title = document.createElement('h3');
+                title.textContent = result.title;
+                resultDiv.appendChild(title);
+                
+                if (result.description) {
+                    const description = document.createElement('p');
+                    description.textContent = result.description;
+                    resultDiv.appendChild(description);
+                }
+                
+                resultsContainer.appendChild(resultDiv);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+/* Base styles for Colt Wayfinder */
+
+/* Colt brand colors */
+:root {
+  --colt-primary: #0056b3;
+  --colt-secondary: #00a0e9;
+  --colt-accent: #ff6b00;
+  --colt-dark: #1a2a3a;
+  --colt-light: #f5f7fa;
+}
+
+/* Colt gradient background */
+.colt-gradient {
+  background: linear-gradient(135deg, var(--colt-primary), var(--colt-secondary));
+}
+
+/* Colt button styling */
+.colt-btn {
+  background-color: var(--colt-primary);
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.colt-btn:hover {
+  background-color: #004494;
+  transform: translateY(-1px);
+}
+
+.colt-btn:active {
+  transform: translateY(0);
+}
+
+/* Category pills */
+.category-pill {
+  display: inline-block;
+  background-color: #e0f0ff;
+  color: var(--colt-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Card hover effects */
+.solution-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.solution-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

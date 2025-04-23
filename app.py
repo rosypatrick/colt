@@ -4,15 +4,17 @@ Colt Wayfinder Tool - API Backend
 This module provides the FastAPI backend for the Colt Wayfinder tool.
 """
 
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Query, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import os
 import logging
 import uvicorn
+import time
+import re
 
 # Import our modules
 from search_engine import WayfinderSearchEngine
@@ -51,15 +53,66 @@ class GuidedSearchParams(BaseModel):
     industry: Optional[str] = None
     problemType: Optional[str] = None
     buildingType: Optional[str] = None
+    projectSize: Optional[str] = None
+    application: Optional[str] = None
+    glazing: Optional[str] = None
+    useType: Optional[str] = None
+    cvValue: Optional[str] = None
+    uValue: Optional[str] = None
+    acousticsValue: Optional[str] = None
 
 class SearchResponse(BaseModel):
     results: List[Dict[str, Any]]
     total: int
 
+# Middleware for request timing and logging
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    logging.info(f"Request to {request.url.path} completed in {process_time:.4f}s")
+    return response
+
+# Error handler
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logging.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "An unexpected error occurred. Please try again later."}
+    )
+
 # API routes
 @app.get("/")
 async def root():
     return {"message": "Welcome to the Colt Wayfinder API"}
+
+def clean_search_results(results):
+    """Clean search results to remove any unwanted text fragments."""
+    if not results:
+        return results
+        
+    for result in results:
+        if 'description' in result and result['description']:
+            # Remove specific problematic text patterns
+            unwanted_patterns = [
+                r'colt\.info/gb/en\.[^"]*?Jack O\'Hea in 1931[^"]*?',
+                r'We use cookies[^"]*?',
+                r', , \. \. \. and[^"]*?',
+                r'Colt was founded by Jack O\'Hea[^"]*?',
+                r'Jack O\'Hea in 1931[^"]*?'
+            ]
+            
+            for pattern in unwanted_patterns:
+                result['description'] = re.sub(pattern, '', result['description'])
+            
+            # Clean up any excessive punctuation or whitespace
+            result['description'] = re.sub(r'[,\.]{2,}', '', result['description'])
+            result['description'] = re.sub(r'\s+', ' ', result['description'])
+            result['description'] = result['description'].strip()
+    
+    return results
 
 @app.get("/search", response_model=SearchResponse)
 async def search(q: str = Query(..., min_length=1), limit: int = Query(10, ge=1, le=50)):
@@ -74,13 +127,18 @@ async def search(q: str = Query(..., min_length=1), limit: int = Query(10, ge=1,
         Search results matching the query
     """
     try:
+        logging.info(f"Search request with query: '{q}', limit: {limit}")
         results = search_engine.search(q, limit=limit)
+        
+        # Clean results before returning them
+        cleaned_results = clean_search_results(results)
+        
         return {
-            "results": results,
-            "total": len(results)
+            "results": cleaned_results,
+            "total": len(cleaned_results)
         }
     except Exception as e:
-        logging.error(f"Error during search: {str(e)}")
+        logging.error(f"Error during search: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Search failed")
 
 @app.post("/guided-search", response_model=SearchResponse)
@@ -96,18 +154,30 @@ async def guided_search(params: GuidedSearchParams, limit: int = Query(10, ge=1,
         Curated search results based on the parameters
     """
     try:
+        logging.info(f"Guided search request with params: {params.dict(exclude_none=True)}, limit: {limit}")
         results = search_engine.guided_search(
             industry=params.industry,
             problem_type=params.problemType,
             building_type=params.buildingType,
+            project_size=params.projectSize,
+            application=params.application,
+            glazing=params.glazing,
+            use_type=params.useType,
+            cv_value=params.cvValue,
+            u_value=params.uValue,
+            acoustics_value=params.acousticsValue,
             limit=limit
         )
+        
+        # Clean results before returning them
+        cleaned_results = clean_search_results(results)
+        
         return {
-            "results": results,
-            "total": len(results)
+            "results": cleaned_results,
+            "total": len(cleaned_results)
         }
     except Exception as e:
-        logging.error(f"Error during guided search: {str(e)}")
+        logging.error(f"Error during guided search: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Guided search failed")
 
 @app.get("/related/{item_id}", response_model=SearchResponse)
@@ -123,48 +193,122 @@ async def get_related(item_id: str, limit: int = Query(5, ge=1, le=20)):
         Related items
     """
     try:
+        logging.info(f"Related content request for item: '{item_id}', limit: {limit}")
         results = search_engine.get_related_content(item_id, limit=limit)
+        
+        # Clean results before returning them
+        cleaned_results = clean_search_results(results)
+        
         return {
-            "results": results,
-            "total": len(results)
+            "results": cleaned_results,
+            "total": len(cleaned_results)
         }
     except Exception as e:
-        logging.error(f"Error getting related content: {str(e)}")
+        logging.error(f"Error getting related content: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to get related content")
 
 @app.get("/categories")
 async def get_categories():
     """Get all available categories for filtering."""
     try:
-        # This would normally come from a database
-        categories = {
-            "industries": [
+        # Extract unique categories from the products
+        categories = set()
+        industries = set()
+        problem_types = set()
+        building_types = set()
+        
+        for product in search_engine.products:
+            if 'categories' in product:
+                for category in product['categories']:
+                    categories.add(category)
+        
+        for solution in search_engine.solutions:
+            if 'industries' in solution:
+                for industry in solution['industries']:
+                    industries.add(industry)
+        
+        # If we don't have enough data from the scraped content, add some defaults
+        if len(categories) < 3:
+            categories.update([
+                "Smoke Control",
+                "Climate Control",
+                "Ventilation",
+                "Energy Efficiency",
+                "Noise Reduction"
+            ])
+        
+        if len(industries) < 3:
+            industries.update([
                 "Commercial Real Estate",
                 "Manufacturing",
                 "Retail",
                 "Logistics",
                 "Warehousing",
                 "Healthcare"
+            ])
+        
+        # Add default building types
+        building_types.update([
+            "Office Building",
+            "Factory",
+            "Warehouse",
+            "Shopping Center",
+            "Hospital",
+            "Data Center"
+        ])
+        
+        # Create the categories response
+        category_response = {
+            "industries": sorted(list(industries)),
+            "problemTypes": sorted(list(categories)),
+            "buildingTypes": sorted(list(building_types)),
+            "projectSizes": [
+                "Small (< 500 m²)",
+                "Medium (500-2000 m²)",
+                "Large (2000-10000 m²)",
+                "Extra Large (> 10000 m²)"
             ],
-            "problemTypes": [
-                "Smoke Control",
-                "Climate Control",
-                "Ventilation",
-                "Energy Efficiency",
-                "Noise Reduction"
+            "applications": [
+                "Roof",
+                "Wall",
+                "Ceiling",
+                "Window/Glazing System",
+                "Screens/Partitions"
             ],
-            "buildingTypes": [
-                "Office Building",
-                "Factory",
-                "Warehouse",
-                "Shopping Center",
-                "Hospital",
-                "Data Center"
+            "glazingTypes": [
+                "Single Glazed",
+                "Double Glazed",
+                "Triple Glazed",
+                "Not Applicable"
+            ],
+            "useTypes": [
+                "Interior",
+                "Exterior"
+            ],
+            "cvValues": [
+                "Low (< 0.4)",
+                "Medium (0.4-0.6)",
+                "High (> 0.6)",
+                "Not Specified"
+            ],
+            "uValues": [
+                "Excellent (< 0.8 W/m²K)",
+                "Good (0.8-1.2 W/m²K)",
+                "Standard (1.2-2.0 W/m²K)",
+                "Basic (> 2.0 W/m²K)",
+                "Not Specified"
+            ],
+            "acousticsValues": [
+                "Low (< 30 dB)",
+                "Medium (30-40 dB)",
+                "High (> 40 dB)",
+                "Not Specified"
             ]
         }
-        return categories
+        
+        return category_response
     except Exception as e:
-        logging.error(f"Error getting categories: {str(e)}")
+        logging.error(f"Error getting categories: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to get categories")
 
 # Mount static files for frontend
@@ -173,6 +317,7 @@ async def startup_event():
     if not os.path.exists("frontend"):
         os.makedirs("frontend", exist_ok=True)
     logging.info("API started successfully")
+    logging.info(f"Loaded {len(search_engine.products)} products, {len(search_engine.solutions)} solutions, and {len(search_engine.technical_docs)} technical documents")
 
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
