@@ -8,25 +8,62 @@ class WayfinderApiClient {
     constructor(baseUrl = null) {
         // Dynamically determine the API URL based on the environment
         if (!baseUrl) {
-            // Check if we're in Codespaces (GitHub's domain)
+            // Enhanced Codespaces detection - check for various GitHub domains
             const isCodespaces = typeof window !== 'undefined' && 
-                window.location.hostname.includes('github.dev');
+                (window.location.hostname.includes('github.dev') || 
+                 window.location.hostname.includes('github-dev.com') || 
+                 window.location.hostname.includes('codespaces') ||
+                 window.location.hostname.includes('githubpreview.dev') ||
+                 window.location.hostname.includes('app.github.dev'));
+            
+            console.log(`Hostname detection: ${window.location.hostname}`);
+            console.log(`Is Codespaces environment: ${isCodespaces}`);
             
             if (isCodespaces) {
-                // In Codespaces, use the same hostname but with port 8000
-                const hostname = window.location.hostname;
-                // Extract the subdomain part before the first dot
-                const subdomainParts = hostname.split('.');
-                const portPart = subdomainParts[0];
-                
-                // Replace the port number in the subdomain (e.g., from -3000 to -8000)
-                const backendPortPart = portPart.replace(/-\d+$/, '-8000');
-                
-                // Reconstruct the hostname with the backend port
-                const backendHostname = hostname.replace(portPart, backendPortPart);
-                
-                this.baseUrl = `https://${backendHostname}`;
-                console.log(`Detected Codespaces environment, using API URL: ${this.baseUrl}`);
+                try {
+                    // In Codespaces, each port gets its own subdomain
+                    const hostname = window.location.hostname;
+                    console.log(`Original hostname: ${hostname}`);
+                    
+                    // Extract the base part of the hostname (before .app.github.dev or similar)
+                    const baseHostnameParts = hostname.split('.');
+                    const domainSuffix = baseHostnameParts.slice(1).join('.');
+                    
+                    // Extract the project name and port from the first part
+                    const firstPart = baseHostnameParts[0];
+                    console.log(`First part of hostname: ${firstPart}`);
+                    
+                    // Check if the hostname follows the pattern with port at the end
+                    const portMatch = firstPart.match(/-(\d+)$/);
+                    if (portMatch) {
+                        // Get the project name without the port suffix
+                        const projectName = firstPart.substring(0, firstPart.lastIndexOf('-'));
+                        console.log(`Project name: ${projectName}`);
+                        
+                        // Create a new hostname with port 8000
+                        const backendHostname = `${projectName}-8000.${domainSuffix}`;
+                        console.log(`Constructed backend hostname: ${backendHostname}`);
+                        
+                        this.baseUrl = `https://${backendHostname}`;
+                    } else {
+                        // If we can't determine the pattern, try a simple replacement
+                        // This is a fallback approach
+                        const backendHostname = hostname.replace('-3000', '-8000');
+                        console.log(`Fallback backend hostname: ${backendHostname}`);
+                        
+                        this.baseUrl = `https://${backendHostname}`;
+                    }
+                    
+                    console.log(`Detected Codespaces environment, using API URL: ${this.baseUrl}`);
+                    
+                    // Verify the backend URL is reachable
+                    this.testBackendConnection();
+                } catch (error) {
+                    console.error('Error configuring Codespaces URL:', error);
+                    // Fallback to a default URL
+                    this.baseUrl = 'http://localhost:8000';
+                    console.log(`Falling back to default API URL: ${this.baseUrl}`);
+                }
             } else {
                 // Default for local development
                 this.baseUrl = 'http://localhost:8000';
@@ -34,6 +71,7 @@ class WayfinderApiClient {
             }
         } else {
             this.baseUrl = baseUrl;
+            console.log(`Using provided API URL: ${this.baseUrl}`);
         }
     }
 
@@ -131,6 +169,33 @@ class WayfinderApiClient {
         } catch (error) {
             console.error('Get categories error:', error);
             throw error;
+        }
+    }
+
+    // Test if the backend connection works
+    async testBackendConnection() {
+        try {
+            console.log(`Testing connection to: ${this.baseUrl}`);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+            
+            const response = await fetch(`${this.baseUrl}/`, {
+                method: 'GET',
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (response.ok) {
+                console.log('Backend connection successful');
+            } else {
+                console.warn(`Backend connection failed with status: ${response.status}`);
+                // Don't change the URL yet, let the actual API calls fail naturally
+            }
+        } catch (error) {
+            console.error('Backend connection test failed:', error);
+            // If connection test fails, we could switch to an alternative URL here
+            // but for now we'll keep the current URL and let the API calls handle errors
         }
     }
 }
