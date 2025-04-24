@@ -96,7 +96,7 @@ const ResultCard = ({ item, apiClient, showRelatedItems = true }) => {
         
         return (
             <div className="related-items bg-white rounded-lg shadow-lg p-6 h-full">
-                <h4 className="text-lg font-semibold mb-4">Related Items</h4>
+                <h4 className="text-lg font-semibold mb-4">Related Products</h4>
                 {loadingRelated ? (
                     <LoadingSpinner />
                 ) : error ? (
@@ -124,7 +124,7 @@ const ResultCard = ({ item, apiClient, showRelatedItems = true }) => {
                         ))}
                     </div>
                 ) : (
-                    <p className="text-gray-500">No related items found.</p>
+                    <p className="text-gray-500">No related products found.</p>
                 )}
             </div>
         );
@@ -133,14 +133,22 @@ const ResultCard = ({ item, apiClient, showRelatedItems = true }) => {
     // Clean the description text
     const cleanedDescription = cleanText(item.description);
     
+    // Get the appropriate tag style based on recommendation type
+    const getRecommendationTagStyle = () => {
+        if (item.recommendation_type === 'Recommended') {
+            return 'bg-green-100 text-green-800 border border-green-300 font-bold px-3 py-1 rounded';
+        }
+        return 'bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded';
+    };
+    
     // Main product card content
     const renderMainContent = () => (
-        <div className="solution-card bg-white rounded-lg shadow-lg overflow-hidden h-full">
+        <div className={`solution-card bg-white rounded-lg shadow-lg overflow-hidden h-full ${item.recommendation_type === 'Recommended' ? 'border-2 border-green-500' : ''}`}>
             {renderImage()}
             <div className="p-6">
                 {item.recommendation_type && (
                     <div className="mb-2">
-                        <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                        <span className={getRecommendationTagStyle()}>
                             {item.recommendation_type}
                         </span>
                     </div>
@@ -178,7 +186,11 @@ const ResultCard = ({ item, apiClient, showRelatedItems = true }) => {
                             href={item.url} 
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="colt-btn-sm py-1 px-3 rounded-lg inline-flex items-center"
+                            className={`py-1 px-3 rounded-lg inline-flex items-center ${
+                                item.recommendation_type === 'Recommended' 
+                                    ? 'bg-green-600 hover:bg-green-700 text-white' 
+                                    : 'colt-btn-sm'
+                            }`}
                         >
                             View Details <i className="fas fa-external-link-alt ml-1"></i>
                         </a>
