@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { LoadingSpinner, ErrorMessage } from './UIComponents';
 
@@ -25,6 +25,30 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
         acousticsValue: ''
     });
     
+    // Define relationships between industries and building types
+    const industryBuildingTypeMap = {
+        'Healthcare': ['Hospital', 'Medical Center', 'Clinic', 'Laboratory', 'Care Home'],
+        'Commercial Real Estate': ['Office Building', 'Corporate Headquarters', 'Business Park'],
+        'Manufacturing': ['Factory', 'Production Facility', 'Industrial Plant'],
+        'Retail': ['Shopping Center', 'Retail Store', 'Mall', 'Supermarket'],
+        'Logistics': ['Warehouse', 'Distribution Center', 'Logistics Hub'],
+        'Warehousing': ['Warehouse', 'Storage Facility', 'Cold Storage'],
+        // Default case for any industry not explicitly mapped
+        'default': ['Office Building', 'Factory', 'Warehouse', 'Shopping Center', 'Hospital', 'Data Center']
+    };
+    
+    // Define relationships between industries and problem types
+    const industryProblemTypeMap = {
+        'Healthcare': ['Smoke Control', 'Climate Control', 'Ventilation', 'Noise Reduction'],
+        'Commercial Real Estate': ['Smoke Control', 'Climate Control', 'Ventilation', 'Energy Efficiency'],
+        'Manufacturing': ['Smoke Control', 'Ventilation', 'Climate Control', 'Energy Efficiency'],
+        'Retail': ['Climate Control', 'Ventilation', 'Energy Efficiency', 'Smoke Control'],
+        'Logistics': ['Ventilation', 'Smoke Control', 'Climate Control'],
+        'Warehousing': ['Ventilation', 'Smoke Control', 'Climate Control'],
+        // Default case
+        'default': ['Smoke Control', 'Climate Control', 'Ventilation', 'Energy Efficiency', 'Noise Reduction', 'Louvre']
+    };
+    
     // Fetch categories on component mount
     useEffect(() => {
         const fetchCategories = async () => {
@@ -44,6 +68,40 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
         fetchCategories();
     }, [apiClient]);
     
+    // Filter building types based on selected industry
+    const filteredBuildingTypes = useMemo(() => {
+        if (!categories || !params.industry) {
+            return categories?.buildingTypes || [];
+        }
+        
+        // Get the building types for the selected industry, or use default if not found
+        const relevantTypes = industryBuildingTypeMap[params.industry] || industryBuildingTypeMap.default;
+        
+        // Filter the available building types to only include relevant ones
+        return categories.buildingTypes.filter(type => 
+            relevantTypes.some(relevantType => 
+                type.toLowerCase().includes(relevantType.toLowerCase())
+            )
+        );
+    }, [categories, params.industry]);
+    
+    // Filter problem types based on selected industry
+    const filteredProblemTypes = useMemo(() => {
+        if (!categories || !params.industry) {
+            return categories?.problemTypes || [];
+        }
+        
+        // Get the problem types for the selected industry, or use default if not found
+        const relevantTypes = industryProblemTypeMap[params.industry] || industryProblemTypeMap.default;
+        
+        // Filter the available problem types to only include relevant ones
+        return categories.problemTypes.filter(type => 
+            relevantTypes.some(relevantType => 
+                type.toLowerCase().includes(relevantType.toLowerCase())
+            )
+        );
+    }, [categories, params.industry]);
+    
     const handleNextStep = () => {
         setStep(prevStep => prevStep + 1);
     };
@@ -59,6 +117,36 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
         );
         
         onSearch(filteredParams);
+    };
+    
+    // Handle parameter change with validation
+    const handleParamChange = (paramName, value) => {
+        // Create a new params object
+        const newParams = { ...params, [paramName]: value };
+        
+        // If changing industry, reset building type if it's not valid for the new industry
+        if (paramName === 'industry') {
+            const relevantTypes = industryBuildingTypeMap[value] || industryBuildingTypeMap.default;
+            const isCurrentBuildingTypeValid = relevantTypes.some(type => 
+                params.buildingType.toLowerCase().includes(type.toLowerCase())
+            );
+            
+            if (params.buildingType && !isCurrentBuildingTypeValid) {
+                newParams.buildingType = '';
+            }
+            
+            // Also reset problem type if changing industry
+            const relevantProblemTypes = industryProblemTypeMap[value] || industryProblemTypeMap.default;
+            const isCurrentProblemTypeValid = relevantProblemTypes.some(type => 
+                params.problemType.toLowerCase().includes(type.toLowerCase())
+            );
+            
+            if (params.problemType && !isCurrentProblemTypeValid) {
+                newParams.problemType = '';
+            }
+        }
+        
+        setParams(newParams);
     };
     
     if (loading) {
@@ -92,7 +180,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                                         ? 'border-blue-500 bg-blue-50' 
                                         : 'border-gray-300 hover:border-blue-300'
                                 }`}
-                                onClick={() => setParams({...params, industry})}
+                                onClick={() => handleParamChange('industry', industry)}
                             >
                                 {industry}
                             </button>
@@ -114,7 +202,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                 <div className="wayfinder-step">
                     <h3 className="text-lg font-semibold mb-3">What problem are you trying to solve?</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                        {categories.problemTypes.map(problemType => (
+                        {filteredProblemTypes.map(problemType => (
                             <button
                                 key={problemType}
                                 className={`p-3 rounded-lg border-2 text-left ${
@@ -122,7 +210,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                                         ? 'border-blue-500 bg-blue-50' 
                                         : 'border-gray-300 hover:border-blue-300'
                                 }`}
-                                onClick={() => setParams({...params, problemType})}
+                                onClick={() => handleParamChange('problemType', problemType)}
                             >
                                 {problemType}
                             </button>
@@ -148,50 +236,28 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
             
             {step === 3 && (
                 <div className="wayfinder-step">
-                    <h3 className="text-lg font-semibold mb-3">What type of building is it for?</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                        {categories.buildingTypes.map(buildingType => (
-                            <button
-                                key={buildingType}
-                                className={`p-3 rounded-lg border-2 text-left ${
-                                    params.buildingType === buildingType 
-                                        ? 'border-blue-500 bg-blue-50' 
-                                        : 'border-gray-300 hover:border-blue-300'
-                                }`}
-                                onClick={() => setParams({...params, buildingType})}
+                    <h3 className="text-lg font-semibold mb-3">Additional Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Building Type</label>
+                            <select 
+                                className="w-full p-2 border border-gray-300 rounded-md"
+                                value={params.buildingType}
+                                onChange={(e) => handleParamChange('buildingType', e.target.value)}
                             >
-                                {buildingType}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="flex justify-between mt-4">
-                        <button 
-                            className="py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-100"
-                            onClick={handlePrevStep}
-                        >
-                            <i className="fas fa-arrow-left mr-2"></i> Back
-                        </button>
-                        <button 
-                            className="colt-btn py-2 px-4 rounded-lg"
-                            onClick={handleNextStep}
-                            disabled={!params.buildingType}
-                        >
-                            Next <i className="fas fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-                </div>
-            )}
-            
-            {step === 4 && (
-                <div className="wayfinder-step">
-                    <h3 className="text-lg font-semibold mb-3">Additional Requirements (Optional)</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <option value="">Select building type</option>
+                                {filteredBuildingTypes.map(type => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                            </select>
+                        </div>
+                        
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Project Size</label>
                             <select 
                                 className="w-full p-2 border border-gray-300 rounded-md"
                                 value={params.projectSize}
-                                onChange={(e) => setParams({...params, projectSize: e.target.value})}
+                                onChange={(e) => handleParamChange('projectSize', e.target.value)}
                             >
                                 <option value="">Select project size</option>
                                 {categories.projectSizes.map(size => (
@@ -205,7 +271,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                             <select 
                                 className="w-full p-2 border border-gray-300 rounded-md"
                                 value={params.application}
-                                onChange={(e) => setParams({...params, application: e.target.value})}
+                                onChange={(e) => handleParamChange('application', e.target.value)}
                             >
                                 <option value="">Select application</option>
                                 {categories.applications.map(app => (
@@ -219,7 +285,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                             <select 
                                 className="w-full p-2 border border-gray-300 rounded-md"
                                 value={params.glazing}
-                                onChange={(e) => setParams({...params, glazing: e.target.value})}
+                                onChange={(e) => handleParamChange('glazing', e.target.value)}
                             >
                                 <option value="">Select glazing type</option>
                                 {categories.glazingTypes.map(type => (
@@ -233,7 +299,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                             <select 
                                 className="w-full p-2 border border-gray-300 rounded-md"
                                 value={params.useType}
-                                onChange={(e) => setParams({...params, useType: e.target.value})}
+                                onChange={(e) => handleParamChange('useType', e.target.value)}
                             >
                                 <option value="">Select use type</option>
                                 {categories.useTypes.map(type => (

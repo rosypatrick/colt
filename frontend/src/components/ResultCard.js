@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LoadingSpinner, ErrorMessage } from './UIComponents';
 
@@ -7,20 +7,26 @@ import { LoadingSpinner, ErrorMessage } from './UIComponents';
  * 
  * Displays a product or solution card with details and related items
  */
-const ResultCard = ({ item, apiClient }) => {
+const ResultCard = ({ item, apiClient, showRelatedItems = true }) => {
     const [expanded, setExpanded] = useState(false);
     const [relatedItems, setRelatedItems] = useState([]);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [error, setError] = useState(null);
     
-    const toggleExpand = () => {
-        setExpanded(!expanded);
-        if (!expanded && !relatedItems.length && !loadingRelated) {
+    // Load related items on component mount if showRelatedItems is true
+    useEffect(() => {
+        if (showRelatedItems) {
             loadRelatedItems();
         }
+    }, [item.id, showRelatedItems]);
+    
+    const toggleExpand = () => {
+        setExpanded(!expanded);
     };
     
     const loadRelatedItems = async () => {
+        if (loadingRelated) return;
+        
         setLoadingRelated(true);
         setError(null);
         try {
@@ -84,11 +90,52 @@ const ResultCard = ({ item, apiClient }) => {
         return null;
     };
     
+    // Function to render related items section
+    const renderRelatedItems = () => {
+        if (!showRelatedItems) return null;
+        
+        return (
+            <div className="related-items bg-white rounded-lg shadow-lg p-6 h-full">
+                <h4 className="text-lg font-semibold mb-4">Related Items</h4>
+                {loadingRelated ? (
+                    <LoadingSpinner />
+                ) : error ? (
+                    <ErrorMessage message={error} />
+                ) : relatedItems.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-4">
+                        {relatedItems.map(related => (
+                            <div key={related.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <h5 className="font-medium mb-2">{related.title}</h5>
+                                <p className="text-sm text-gray-500 mb-2">
+                                    {related.type === 'product' ? 'Product' : 
+                                     related.type === 'solution' ? 'Solution' : 'Document'}
+                                </p>
+                                {related.url && (
+                                    <a 
+                                        href={related.url} 
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-500 hover:underline text-sm"
+                                    >
+                                        View Details
+                                    </a>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-gray-500">No related items found.</p>
+                )}
+            </div>
+        );
+    };
+    
     // Clean the description text
     const cleanedDescription = cleanText(item.description);
     
-    return (
-        <div className="solution-card bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+    // Main product card content
+    const renderMainContent = () => (
+        <div className="solution-card bg-white rounded-lg shadow-lg overflow-hidden h-full">
             {renderImage()}
             <div className="p-6">
                 {item.recommendation_type && (
@@ -103,30 +150,37 @@ const ResultCard = ({ item, apiClient }) => {
                 
                 {item.type === 'product' && item.categories && (
                     <div className="mb-4">
-                        {item.categories.map(cat => (
-                            <span key={cat} className="category-pill">
-                                {cat}
-                            </span>
-                        ))}
+                        <h4 className="text-sm font-semibold text-gray-700 mb-1">Categories</h4>
+                        <div className="flex flex-wrap gap-1">
+                            {item.categories.map((category, index) => (
+                                <span 
+                                    key={index} 
+                                    className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded"
+                                >
+                                    {category}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 )}
                 
-                <div className="flex justify-between items-center mt-2">
+                <div className="flex justify-between items-center">
                     <button 
-                        className="text-blue-500 hover:text-blue-700 font-medium flex items-center"
+                        className="text-blue-500 hover:text-blue-700 text-sm font-medium flex items-center"
                         onClick={toggleExpand}
                     >
                         {expanded ? 'Show Less' : 'Show More'} 
                         <i className={`fas fa-chevron-${expanded ? 'up' : 'down'} ml-1`}></i>
                     </button>
+                    
                     {item.url && (
                         <a 
                             href={item.url} 
-                            target="_blank" 
+                            target="_blank"
                             rel="noopener noreferrer"
-                            className="colt-btn py-2 px-4 rounded-lg"
+                            className="colt-btn-sm py-1 px-3 rounded-lg inline-flex items-center"
                         >
-                            View Details
+                            View Details <i className="fas fa-external-link-alt ml-1"></i>
                         </a>
                     )}
                 </div>
@@ -161,48 +215,35 @@ const ResultCard = ({ item, apiClient }) => {
                             )}
                         </>
                     )}
-                    
-                    <div>
-                        <h4 className="text-lg font-semibold mb-2">Related Items</h4>
-                        {loadingRelated ? (
-                            <LoadingSpinner />
-                        ) : error ? (
-                            <ErrorMessage message={error} />
-                        ) : relatedItems.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                {relatedItems.map(related => (
-                                    <div key={related.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                                        <h5 className="font-medium mb-2">{related.title}</h5>
-                                        <p className="text-sm text-gray-500 mb-2">
-                                            {related.type === 'product' ? 'Product' : 
-                                             related.type === 'solution' ? 'Solution' : 'Document'}
-                                        </p>
-                                        {related.url && (
-                                            <a 
-                                                href={related.url} 
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-500 hover:underline text-sm"
-                                            >
-                                                View Details
-                                            </a>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-gray-500">No related items found.</p>
-                        )}
-                    </div>
                 </div>
             )}
+        </div>
+    );
+    
+    // If we're not showing related items, just return the main content
+    if (!showRelatedItems) {
+        return renderMainContent();
+    }
+    
+    // Return both main content and related items for the side-by-side layout
+    return (
+        <div className="w-full mb-6">
+            <div className="flex flex-col md:flex-row md:space-x-6">
+                <div className="w-full md:w-2/3 mb-6 md:mb-0">
+                    {renderMainContent()}
+                </div>
+                <div className="w-full md:w-1/3">
+                    {renderRelatedItems()}
+                </div>
+            </div>
         </div>
     );
 };
 
 ResultCard.propTypes = {
     item: PropTypes.object.isRequired,
-    apiClient: PropTypes.object.isRequired
+    apiClient: PropTypes.object.isRequired,
+    showRelatedItems: PropTypes.bool
 };
 
 export default ResultCard;

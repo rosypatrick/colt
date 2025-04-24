@@ -26,7 +26,6 @@ Firelight Duo is a natural smoke vent, also suitable for daily ventilation.
 
 ## Features
 
-- Smoke ControlSmoke Control SystemsSmoke Control Systems OverviewAOV SystemsSmoke and heat exhaust ventilation systems (SHEVS)Smoke Containment SystemsCar Park Ventilation SystemsShaft Ventilation SystemsPressurisation SystemsServices & SolutionsSmoke Control ProductsOur ExpertiseDesign SupportSmall WorksOur AccreditationsService & MaintenanceBuilding TypesAtriaCar ParksManufacturingResidentialRetail
 - Smoke Control Systems Overview
 - AOV Systems
 - Smoke and heat exhaust ventilation systems (SHEVS)
@@ -45,8 +44,6 @@ Firelight Duo is a natural smoke vent, also suitable for daily ventilation.
 - Manufacturing
 - Residential
 - Retail
-- Climate ControlClimate Control ExpertsColt pioneered natural ventilation in the 1930s, with over 85 years of climate control experience, making us the longest-standing company in the field. We've expanded from factory solutions to diverse building types.
-Climate Control SystemsClimate Control Systems OverviewEvaporative Cooling SystemsHybrid Ventilation SystemsMechanical Ventilation & HVAC SystemsNatural Ventilation SystemsServices & SolutionsClimate Control ProductsOur ExpertiseDesign SupportOur Accreditations
 - Climate Control Systems Overview
 - Evaporative Cooling Systems
 - Hybrid Ventilation Systems
@@ -56,8 +53,6 @@ Climate Control SystemsClimate Control Systems OverviewEvaporative Cooling Syste
 - Our Expertise
 - Design Support
 - Our Accreditations
-- LouvreLouvre ExpertsColt has been manufacturing and installing external solutions for almost two decades. We are experts in screening and ventilation louvre panels and screening whilst maintaining rain defence.
-Services & SolutionsLouvre System OverviewOur Louvre ExpertiseLouvre System Design SupportUnderstanding Louvre SystemsLouvre ProductsLouvre Products1UL Screening Louvre2UL Ventilation Louvre3UL Weather LouvreAcoustic Louvre
 - Louvre System Overview
 - Our Louvre Expertise
 - Louvre System Design Support
@@ -67,8 +62,6 @@ Services & SolutionsLouvre System OverviewOur Louvre ExpertiseLouvre System Desi
 - 2UL Ventilation Louvre
 - 3UL Weather Louvre
 - Acoustic Louvre
-- ServiceSmoke Control System Maintenance ExpertsWith decades of experience in smoke control system maintenance, Colt is a trusted leader in the field. We've refined our expertise across various building types, ensuring safety, compliance, and reliability. 
-Services & SolutionsService & Maintenance OverviewYour Smoke Control Maintenance ChecklistBenefits of a Service ContractColt EngineersOur ExpertiseOur ExpertiseOur Smoke Control Maintenence EngineersYour Legal ObligationsSmoke Damper MaintenanceSpare Parts (Small Works)
 - Service & Maintenance Overview
 - Your Smoke Control Maintenance Checklist
 - Benefits of a Service Contract
@@ -78,31 +71,6 @@ Services & SolutionsService & Maintenance OverviewYour Smoke Control Maintenance
 - Your Legal Obligations
 - Smoke Damper Maintenance
 - Spare Parts (Small Works)
-- ResourcesColt UKExplore our Resources area for downloads, knowledge articles, case studies, and additional design services. Access expert insights and tools to support your projects.
-ResourcesDownloadsCase StudiesKnowledge ArticlesDesign Support
-- Downloads
-- Case Studies
-- Knowledge Articles
-- Design Support
-- AboutColtColt was founded by Jack O’Hea in 1931 and has been pioneering ventilation solutions ever since.
-About Colt UKAbout Colt UKExpertise & ExperienceAccreditations & MembershipsHealth, Safety & EnvironmentTesting & ManufacturingDesign Support
-- About Colt UK
-- Expertise & Experience
-- Accreditations & Memberships
-- Health, Safety & Environment
-- Testing & Manufacturing
-- Design Support
-- Contact
-- Smoke Control(3)
-- Climate Control(2)
-- Louvre(2)
-- Service(2)
-- Resources(1)
-- About(1)
-- Contact
-- Overview
-- Technical Information
-- Downloads
 - Thermally broken, insulated or single skin versions
 - EN 12101-2 and VdS certified
 - Polycarbonate, Insulated and Glass Flap options available
@@ -112,40 +80,7 @@ About Colt UKAbout Colt UKExpertise & ExperienceAccreditations & MembershipsHeal
 - Manufactured in accordance with the requirements of ISO 9001 (quality management standard)
 - High volume smoke extraction capability
 - Available up to a maximum width x length of 2500 x 3000 mm in mm increments
-- Contact Colt UKGeneral Enquiries02392 451111Sales & Technical Enquiries02392 491951Service & Maintenance Enquiries02392 491735Louvre Team02392 491210
-- General Enquiries02392 451111
-- Sales & Technical Enquiries02392 491951
-- Service & Maintenance Enquiries02392 491735
-- Louvre Team02392 491210
-- Email Colt UKSales & Technical Enquiries EmailService & Maintenance EnquiriesEmail
-- Sales & Technical Enquiries Email
-- Service & Maintenance EnquiriesEmail
-- Service and Maintenance
-- Smoke Control
-- Building Ventilation
-- Louvre
-- Service and Maintenance
-- Smoke Control
-- Building Ventilation
-- Louvre
-- Products
-- Case Studies
-- Downloads
-- About Colt
-- Contact Colt
-- Products
-- Case Studies
-- Downloads
-- About Colt
-- Contact Colt
-- Privacy Policy
-- Modern Slavery policy
-- Terms & Conditions
-- Legal Notice
-- Privacy Policy
-- Modern Slavery policy
-- Terms & Conditions
-- Legal Notice
+-
 
 ## Images
 

@@ -24,7 +24,6 @@ Integrate smoke control components into addressable smoke control systems.
 
 ## Features
 
-- Smoke ControlSmoke Control SystemsSmoke Control Systems OverviewAOV SystemsSmoke and heat exhaust ventilation systems (SHEVS)Smoke Containment SystemsCar Park Ventilation SystemsShaft Ventilation SystemsPressurisation SystemsServices & SolutionsSmoke Control ProductsOur ExpertiseDesign SupportSmall WorksOur AccreditationsService & MaintenanceBuilding TypesAtriaCar ParksManufacturingResidentialRetail
 - Smoke Control Systems Overview
 - AOV Systems
 - Smoke and heat exhaust ventilation systems (SHEVS)
@@ -44,7 +43,6 @@ Integrate smoke control components into addressable smoke control systems.
 - Residential
 - Retail
 - Climate Control
-Climate Control SystemsClimate Control Systems OverviewEvaporative Cooling SystemsHybrid Ventilation SystemsMechanical Ventilation & HVAC SystemsNatural Ventilation SystemsServices & SolutionsClimate Control ProductsOur ExpertiseDesign SupportOur Accreditations
 - Climate Control Systems Overview
 - Evaporative Cooling Systems
 - Hybrid Ventilation Systems
@@ -55,7 +53,6 @@ Climate Control SystemsClimate Control Systems OverviewEvaporative Cooling Syste
 - Design Support
 - Our Accreditations
 - Louvre
-Services & SolutionsLouvre System OverviewOur Louvre ExpertiseLouvre System Design SupportUnderstanding Louvre SystemsLouvre ProductsLouvre Products1UL Screening Louvre2UL Ventilation Louvre3UL Weather LouvreAcoustic Louvre
 - Louvre System Overview
 - Our Louvre Expertise
 - Louvre System Design Support
@@ -66,7 +63,6 @@ Services & SolutionsLouvre System OverviewOur Louvre ExpertiseLouvre System Desi
 - 3UL Weather Louvre
 - Acoustic Louvre
 - Service 
-Services & SolutionsService & Maintenance OverviewYour Smoke Control Maintenance ChecklistBenefits of a Service ContractColt EngineersOur ExpertiseOur ExpertiseOur Smoke Control Maintenence EngineersYour Legal ObligationsSmoke Damper MaintenanceSpare Parts (Small Works)
 - Service & Maintenance Overview
 - Your Smoke Control Maintenance Checklist
 - Benefits of a Service Contract
@@ -76,29 +72,6 @@ Services & SolutionsService & Maintenance OverviewYour Smoke Control Maintenance
 - Your Legal Obligations
 - Smoke Damper Maintenance
 - Spare Parts (Small Works)
-- Resources
-ResourcesDownloadsCase StudiesKnowledge ArticlesDesign Support
-- Downloads
-- Case Studies
-- Knowledge Articles
-- Design Support
-- AboutColtColt was founded by Jack O’Hea in 1931 and has been .
-About Colt UKAbout Colt UKExpertise & ExperienceAccreditations & MembershipsHealth, Safety & EnvironmentTesting & ManufacturingDesign Support
-- About Colt UK
-- Expertise & Experience
-- Accreditations & Memberships
-- Health, Safety & Environment
-- Testing & Manufacturing
-- Design Support
-- Contact
-- Smoke Control(3)
-- Climate Control(2)
-- Louvre(2)
-- Service(2)
-- Resources(1)
-- About(1)
-- Contact
-- Overview
 - Technical Information
 - Two non-flanged and three flanged versions to choose from, both unidirectional and reversible.
 - The fan is suitable for either two speed or variable speed operation, depending on the application.
@@ -106,39 +79,6 @@ About Colt UKAbout Colt UKExpertise & ExperienceAccreditations & MembershipsHeal
 - Manufactured from hot dipped galvanized casing with the option of a polyester powder coating to any RAL colour.
 - Manufactured to the ISO 9001 quality standard.
 - Low maintenance as there is no ducting to clean.
-- Contact Colt UKSales & Technical Enquiries02392 451111Service & Maintenance Enquiries02392 491735Scotland Enquiries01413 326545
-- Sales & Technical Enquiries02392 451111
-- Service & Maintenance Enquiries02392 491735
-- Scotland Enquiries01413 326545
-- Email Colt UKSales & Technical Enquiries EmailService & Maintenance EnquiriesEmail
-- Sales & Technical Enquiries Email
-- Service & Maintenance EnquiriesEmail
-- Service and Maintenance
-- Smoke Control
-- Building Ventilation
-- Louvre
-- Service and Maintenance
-- Smoke Control
-- Building Ventilation
-- Louvre
-- Products
-- Case Studies
-- Downloads
-- About Colt
-- Contact Colt
-- Products
-- Case Studies
-- Downloads
-- About Colt
-- Contact Colt
-- Privacy Policy
-- Modern Slavery policy
-- Terms & Conditions
-- Legal Notice
-- Privacy Policy
-- Modern Slavery policy
-- Terms & Conditions
-- Legal Notice
 
 ## Images
 
