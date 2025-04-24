@@ -5,8 +5,36 @@
  */
 
 class WayfinderApiClient {
-    constructor(baseUrl = 'http://localhost:8000') {
-        this.baseUrl = baseUrl;
+    constructor(baseUrl = null) {
+        // Dynamically determine the API URL based on the environment
+        if (!baseUrl) {
+            // Check if we're in Codespaces (GitHub's domain)
+            const isCodespaces = typeof window !== 'undefined' && 
+                window.location.hostname.includes('github.dev');
+            
+            if (isCodespaces) {
+                // In Codespaces, use the same hostname but with port 8000
+                const hostname = window.location.hostname;
+                // Extract the subdomain part before the first dot
+                const subdomainParts = hostname.split('.');
+                const portPart = subdomainParts[0];
+                
+                // Replace the port number in the subdomain (e.g., from -3000 to -8000)
+                const backendPortPart = portPart.replace(/-\d+$/, '-8000');
+                
+                // Reconstruct the hostname with the backend port
+                const backendHostname = hostname.replace(portPart, backendPortPart);
+                
+                this.baseUrl = `https://${backendHostname}`;
+                console.log(`Detected Codespaces environment, using API URL: ${this.baseUrl}`);
+            } else {
+                // Default for local development
+                this.baseUrl = 'http://localhost:8000';
+                console.log(`Using default API URL: ${this.baseUrl}`);
+            }
+        } else {
+            this.baseUrl = baseUrl;
+        }
     }
 
     /**
@@ -91,6 +119,7 @@ class WayfinderApiClient {
      */
     async getCategories() {
         try {
+            console.log(`Fetching categories from: ${this.baseUrl}/categories`);
             const response = await fetch(`${this.baseUrl}/categories`);
             
             if (!response.ok) {
