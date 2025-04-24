@@ -4,7 +4,8 @@
   "description": "Frontend for the Colt Wayfinder application",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack serve --mode development --open",
+    "start": "webpack serve --mode development",
+    "start:open": "webpack serve --mode development --open",
     "build": "webpack --mode production",
     "test": "jest"
   },

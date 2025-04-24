@@ -4,18 +4,6 @@
 
 ## Description
 
-We use cookies on our website colt.info/gb/en.  
-
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 The FireCurtain FM1 is an automatic fire curtain which seals off an area to contain a fire and to prevent that fire from spreading to other areas. The automatic fire curtain been tested according to multiple standards and also has a CE mark. The specially developed unwinding mechanism is built into the roller and it unrolls in a gravity fail safe manner without needing power.
 
 Tested in accordance with EN 1634-1
@@ -41,30 +29,6 @@ Continuous 10000 life cycle test in accordance with DIN 4102-18
 A smoke curtain designed to channel smoke, flames, and gases during a fire
 
 SmokeMaster SM-ST: Fixed smoke curtain that channels smoke during a fire
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

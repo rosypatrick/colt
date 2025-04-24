@@ -234,7 +234,8 @@ async def get_categories():
                 "Climate Control",
                 "Ventilation",
                 "Energy Efficiency",
-                "Noise Reduction"
+                "Noise Reduction",
+                "Louvre"
             ])
         
         if len(industries) < 3:
@@ -258,15 +259,24 @@ async def get_categories():
         ])
         
         # Create the categories response
+        # Normalize category names and remove duplicates
+        normalized_categories = set()
+        for category in categories:
+            # Convert to title case for consistency
+            normalized = category.title()
+            # Handle specific cases
+            if normalized == "Smoke-Control":
+                normalized = "Smoke Control"
+            normalized_categories.add(normalized)
+        
         category_response = {
             "industries": sorted(list(industries)),
-            "problemTypes": sorted(list(categories)),
+            "problemTypes": sorted(list(normalized_categories)),
             "buildingTypes": sorted(list(building_types)),
             "projectSizes": [
-                "Small (< 500 m²)",
-                "Medium (500-2000 m²)",
-                "Large (2000-10000 m²)",
-                "Extra Large (> 10000 m²)"
+                "Product dimensions not relevant",
+                "Custom dimensions required",
+                "Standard dimensions acceptable"
             ],
             "applications": [
                 "Roof",
@@ -276,10 +286,10 @@ async def get_categories():
                 "Screens/Partitions"
             ],
             "glazingTypes": [
-                "Single Glazed",
-                "Double Glazed",
-                "Triple Glazed",
-                "Not Applicable"
+                "Polycarbonate",
+                "Glass",
+                "Mixed (Polycarbonate & Glass)",
+                "None/Not Applicable"
             ],
             "useTypes": [
                 "Interior",

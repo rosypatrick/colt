@@ -4,18 +4,6 @@
 
 ## Description
 
-We use cookies on our website colt.info/gb/en.  
-
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 The Colt Defender F2 has been specifically designed for use within mechanical shaft ventilation applications in residential and commercial buildings. This unobtrusive fire rated smoke control damper creates a flush finish with the wall when it is closed and can be painted in a wide range of colours to match your building's design.
 
 Certified to EN12101-8 and tested to EN1363-1 and BS EN1366 Parts 2 and 10, the Defender F2 is fire rated to provide 60 minutes of integrity and insulation when close
@@ -39,30 +27,6 @@ Flap ventilator for smoke exhaust, rainproof ventilation and daylighting
 Combined AOV smoke ventilator and roof access hatch.
 
 Firelight Duo is a natural smoke vent, also suitable for daily ventilation.
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

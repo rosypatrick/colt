@@ -4,18 +4,6 @@
 
 ## Description
 
-We use cookies on our website colt.info/gb/en.  
-
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 Natural louvred glazed vent, suitable for natural and smoke ventilation. Its form and function makes it particularly suited to naturally ventilated buildings where good aerodynamic and measured free area ventilation is required while achieving high acoustic, thermal and aerodynamic performance. Whilst it is primarily designed as a glazed element of the building envelope, it can also be applied as a high specification fire, smoke and air control damper.
 
 Most variants conform to both EN 12101-2 as smoke ventilators; all models conform to EN 14351-1 as natural ventilators
@@ -33,30 +21,6 @@ Manufactured under the ISO 9000 quality standard
 Natural louvred ventilator designed for automatic smoke extraction
 
 The WCO ventilates and illuminates industrial and commercial buildings.
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

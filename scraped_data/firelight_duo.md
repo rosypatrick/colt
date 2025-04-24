@@ -4,18 +4,6 @@
 
 ## Description
 
-We use cookies on our website colt.info/gb/en.  
-
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 Firelight Duo is a natural smoke and day to day ventilator which also permits the entry of natural daylight, suitable for use in commercial, industrial and municipal buildings.. It has been tested in accordance with EN 12101-2, and is 100% thermally broken, reducing the risk of condensation. Its flaps can be insulated aluminium, polycarbonate multi-wall sheets or insulated glass and it is available in sizes up to a maximum (WxL) of 2500 x 3000 mm.
 
 Firelight Duo fulfils the requirements of the EnEV (energy saving regulation)
@@ -39,30 +27,6 @@ Flap ventilator designed for automatic smoke exhaust & natural ventilation
 Flap ventilator for smoke exhaust, rainproof ventilation and daylighting
 
 Combined AOV smoke ventilator and roof access hatch.
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

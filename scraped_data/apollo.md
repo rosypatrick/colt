@@ -24,30 +24,6 @@ Combined AOV smoke ventilator and roof access hatch.
 
 Firelight Duo is a natural smoke vent, also suitable for daily ventilation.
 
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd  —  Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
-
 ## Features
 
 - Smoke ControlSmoke Control SystemsSmoke Control Systems OverviewAOV SystemsSmoke and heat exhaust ventilation systems (SHEVS)Smoke Containment SystemsCar Park Ventilation SystemsShaft Ventilation SystemsPressurisation SystemsServices & SolutionsSmoke Control ProductsOur ExpertiseDesign SupportSmall WorksOur AccreditationsService & MaintenanceBuilding TypesAtriaCar ParksManufacturingResidentialRetail

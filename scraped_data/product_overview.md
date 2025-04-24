@@ -4,16 +4,6 @@
 
 ## Description
 
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 Flap ventilator designed for automatic smoke exhaust & natural ventilation
 
 Combined AOV smoke ventilator and roof access hatch.
@@ -33,20 +23,6 @@ Triple bank Universal Louvre fixed metal weather louvre system.
 Coltair is a heavy-duty industrial air handling system.
 
 Natural louvred glazed vent, suitable for natural and smoke ventilation.
-
-To get in touch, please contact us using the details below or visit our contact page here
-
-Colt House, Ridgeway Office Park
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

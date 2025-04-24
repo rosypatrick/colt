@@ -4,14 +4,6 @@
 
 ## Description
 
-Colt pioneered natural ventilation in the 1930s, with over 85 years of climate control experience, making us the longest-standing company in the field. We've expanded from factory solutions to diverse building types.
-
-Colt has been manufacturing and installing external solutions for almost two decades. We are experts in screening and ventilation louvre panels and screening whilst maintaining rain defence.
-
-With decades of experience in smoke control system maintenance, Colt is a trusted leader in the field. We've refined our expertise across various building types, ensuring safety, compliance, and reliability.
-
-Explore our Resources area for downloads, knowledge articles, case studies, and additional design services. Access expert insights and tools to support your projects.
-
 Certified according to EN 12101-2 and VdS-approved, Apollo ATI is a natural smoke and heat extraction ventilator which is primarily used in industrial, commercial and municipal buildings.
 Side dampers are integrated into the Apollo ATI body which can be opened for rain-proof day-to-day ventilation. Aerodynamically shaped vanes prevent the penetration of rainwater, while at the same time allowing ventilation, while side profiles direct this water away from the ventilator onto the roof.
 
@@ -36,30 +28,6 @@ Flap ventilator designed for automatic smoke exhaust & natural ventilation
 Combined AOV smoke ventilator and roof access hatch.
 
 Firelight Duo is a natural smoke vent, also suitable for daily ventilation.
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd  —  Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

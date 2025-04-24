@@ -4,7 +4,27 @@
  * Handles all communication with the backend API
  */
 
-const API_BASE_URL = '/api';
+// Dynamically determine the API base URL based on the environment
+const getApiBaseUrl = () => {
+    // Check if we're running in GitHub Codespaces
+    const isCodespaces = window.location.hostname.includes('.github.dev') || 
+                          window.location.hostname.includes('.preview.app.github.dev');
+    
+    if (isCodespaces) {
+        // In Codespaces, we need to modify the URL to point to the backend port
+        // Convert frontend URL like https://user-codespace-name-3000.preview.app.github.dev/
+        // to backend URL like https://user-codespace-name-8000.preview.app.github.dev/
+        const currentUrl = window.location.origin;
+        // Replace the port number in the URL (e.g., -3000 to -8000)
+        const backendUrl = currentUrl.replace(/-3000\./g, '-8000.');
+        return `${backendUrl}`;
+    }
+    
+    // For local development, use the relative path which will be handled by the webpack proxy
+    return '/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 /**
  * Handles API errors and provides consistent error messages

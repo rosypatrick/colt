@@ -4,18 +4,6 @@
 
 ## Description
 
-We use cookies on our website colt.info/gb/en.  
-
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 Jetstream is an impulse fan designed for the ventilation of car parks and underground service areas, so as both to reduce levels of polluted air and to extract smoke in the event of a fire. The fans use tunnel ventilation technology to eliminate the need for costly and bulky ductwork. Compared to ductwork systems, this may save car-parking spaces, reduce running costs and noise, and make the car park a lighter, less cluttered environment.
 
 Two non-flanged and three flanged versions to choose from, both unidirectional and reversible.
@@ -33,30 +21,6 @@ Low maintenance as there is no ducting to clean.
 Jetstream is an impulse fan designed for the ventilation of car parks.
 
 Integrate smoke control components into addressable smoke control systems.
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 

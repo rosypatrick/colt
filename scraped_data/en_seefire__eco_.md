@@ -4,18 +4,6 @@
 
 ## Description
 
-We use cookies on our website colt.info/gb/en.  
-
-Colt pioneered natural ventilation in the 1930s, , . .
-
- . and .
-
-, . , .
-
-, . .
-
-Colt was founded by Jack O’Hea in 1931 and has been .
-
 ECO is an EN12101-2 certified natural smoke and heat extract ventilator. The ECO is a louvred vent suitable for a wide variety of applications, its also suitable for day to day building ventilation. The louvres of the ECO are centrally pivoted, which, due to their own weight, open smoothly even when there is no voltage or pressure. The ECO also has an in-built drainage system and comes in a number of variants for specific applications and in sizes up to a maximum width x length of 2326 x 3498 mm
 
 Suitable for a wide variety of applications
@@ -35,30 +23,6 @@ Available up to a maximum width x length of 2326 x 3498 mm
 Natural louvred glazed vent, suitable for natural and smoke ventilation.
 
 The WCO ventilates and illuminates industrial and commercial buildings.
-
-Need further information or help with your project?
-
-Get in touch using the details below or use our contact page
-
-Need help, have questions or want to know more about our products and systems?
-
-If you need help with maintaining your smoke control systems, Colt’s experienced engineers are your best option.
-
-Colt International Ltd
-
-Colt House
-Ridgeway Office Park,
-Bedford Road
-Petersfield
-GU32 3QF
-
-T: +44 (0) 2392 451111
-
-E: info@coltinfo.co.uk
-
-Colt International Ltd — Expertise built on experience
-
-© 2024 Colt International Ltd. All Rights Reserved
 
 ## Features
 
