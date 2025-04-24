@@ -16,7 +16,7 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
         industry: '',
         problemType: '',
         buildingType: '',
-        projectSize: '',
+        productDimensions: '', 
         application: '',
         glazing: '',
         useType: '',
@@ -115,6 +115,12 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
         const filteredParams = Object.fromEntries(
             Object.entries(params).filter(([_, value]) => value !== '')
         );
+        
+        // Map productDimensions back to projectSize for API compatibility
+        if (filteredParams.productDimensions) {
+            filteredParams.projectSize = filteredParams.productDimensions;
+            delete filteredParams.productDimensions;
+        }
         
         onSearch(filteredParams);
     };
@@ -253,13 +259,13 @@ const GuidedSearch = ({ onSearch, apiClient }) => {
                         </div>
                         
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Project Size</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Product Dimensions</label>
                             <select 
                                 className="w-full p-2 border border-gray-300 rounded-md"
-                                value={params.projectSize}
-                                onChange={(e) => handleParamChange('projectSize', e.target.value)}
+                                value={params.productDimensions}
+                                onChange={(e) => handleParamChange('productDimensions', e.target.value)}
                             >
-                                <option value="">Select project size</option>
+                                <option value="">Select product dimensions</option>
                                 {categories.projectSizes.map(size => (
                                     <option key={size} value={size}>{size}</option>
                                 ))}
